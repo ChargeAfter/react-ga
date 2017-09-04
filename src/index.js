@@ -23,18 +23,24 @@ var _format = function (s) {
   return format(s, _titleCase);
 };
 
+var globalName = 'ga';
+
+var globalVar = function() {
+  return window[globalName];
+};
+
 var _gaCommand = function (trackerNames, command) {
   var args = Array.prototype.slice.call(arguments, 1);
-  if (typeof ga === 'function') {
+  if (typeof globalVar() === 'function') {
     if (typeof command !== 'string') {
       warn('ga command must be a string');
       return;
     }
 
-    ga.apply(null, args);
+    globalVar().apply(null, args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach(function (name) {
-        ga.apply(null, [name + '.' + command].concat(args.slice(1)));
+        globalVar().apply(null, [name + '.' + command].concat(args.slice(1)));
       });
     }
   }
@@ -57,9 +63,9 @@ var _initialize = function (gaTrackingID, options) {
   }
 
   if (options && options.gaOptions) {
-    ga('create', gaTrackingID, options.gaOptions);
+    globalVar()('create', gaTrackingID, options.gaOptions);
   } else {
-    ga('create', gaTrackingID, 'auto');
+    globalVar()('create', gaTrackingID, 'auto');
   }
 };
 
@@ -70,6 +76,11 @@ var ReactGA = {
     }
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
     // jscs:disable
+
+    if (options && options.globalName) {
+      globalName = options.globalName;
+    }
+
     (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
       i[r] = i[r] || function () {
@@ -80,7 +91,7 @@ var ReactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', globalName);
     // jscs:enable
 
     if (Array.isArray(configs)) {
@@ -103,14 +114,14 @@ var ReactGA = {
    */
   ga: function () {
     if (arguments.length > 0) {
-      ga.apply(this, arguments);
+      globalVar().apply(this, arguments);
       if (_debug) {
         log('called ga(\'arguments\');');
         log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
       }
     }
 
-    return ga;
+    return globalVar();
   },
 
   /**
@@ -393,7 +404,7 @@ var ReactGA = {
             warn('Empty `options` given to .require()');
           }
 
-          ga('require', name, options);
+          globalVar()('require', name, options);
 
           if (_debug) {
             log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
@@ -401,7 +412,7 @@ var ReactGA = {
 
           return;
         } else {
-          ga('require', name);
+          globalVar()('require', name);
 
           if (_debug) {
             log('called ga(\'require\', \'' + name + '\');');
@@ -445,19 +456,19 @@ var ReactGA = {
           var command = pluginName + ':' + action;
           payload = payload || null;
           if (actionType && payload) {
-            ga(command, actionType, payload);
+            globalVar()(command, actionType, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
               log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
             }
           } else if (payload) {
-            ga(command, payload);
+            globalVar()(command, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
               log('with payload: ' + JSON.stringify(payload));
             }
           } else {
-            ga(command);
+            globalVar()(command);
             if (_debug) {
               log('called ga(\'' + command + '\');');
             }
