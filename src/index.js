@@ -91,7 +91,7 @@ var ReactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', globalName);
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', _globalName);
     // jscs:enable
 
     if (Array.isArray(configs)) {
