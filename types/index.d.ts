@@ -25,12 +25,12 @@ export interface GaOptions {
     legacyHistoryImport?: boolean;
     allowLinker?: boolean;
     userId?: string;
-    globalName?: string;
 }
 
 export interface InitializeOptions {
     debug?: boolean;
     titleCase?: boolean;
+    globalName?: string;
     gaOptions?: GaOptions;
 }
 

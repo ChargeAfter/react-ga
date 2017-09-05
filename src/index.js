@@ -23,10 +23,10 @@ var _format = function (s) {
   return format(s, _titleCase);
 };
 
-var globalName = 'ga';
+var _globalName = 'ga';
 
 var globalVar = function() {
-  return window[globalName];
+  return window[_globalName];
 };
 
 var _gaCommand = function (trackerNames, command) {
@@ -78,7 +78,7 @@ var ReactGA = {
     // jscs:disable
 
     if (options && options.globalName) {
-      globalName = options.globalName;
+      _globalName = options.globalName;
     }
 
     (function (i, s, o, g, r, a, m) {
