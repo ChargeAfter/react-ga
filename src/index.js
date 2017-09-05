@@ -25,22 +25,22 @@ var _format = function (s) {
 
 var _globalName = 'ga';
 
-var globalVar = function() {
+var _globalVar = function() {
   return window[_globalName];
 };
 
 var _gaCommand = function (trackerNames, command) {
   var args = Array.prototype.slice.call(arguments, 1);
-  if (typeof globalVar() === 'function') {
+  if (typeof _globalVar() === 'function') {
     if (typeof command !== 'string') {
       warn('ga command must be a string');
       return;
     }
 
-    globalVar().apply(null, args);
+    _globalVar().apply(null, args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach(function (name) {
-        globalVar().apply(null, [name + '.' + command].concat(args.slice(1)));
+        _globalVar().apply(null, [name + '.' + command].concat(args.slice(1)));
       });
     }
   }
@@ -63,9 +63,9 @@ var _initialize = function (gaTrackingID, options) {
   }
 
   if (options && options.gaOptions) {
-    globalVar()('create', gaTrackingID, options.gaOptions);
+    _globalVar()('create', gaTrackingID, options.gaOptions);
   } else {
-    globalVar()('create', gaTrackingID, 'auto');
+    _globalVar()('create', gaTrackingID, 'auto');
   }
 };
 
@@ -114,14 +114,14 @@ var ReactGA = {
    */
   ga: function () {
     if (arguments.length > 0) {
-      globalVar().apply(this, arguments);
+      _globalVar().apply(this, arguments);
       if (_debug) {
         log('called ' + _globalName +'(\'arguments\');');
         log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
       }
     }
 
-    return globalVar();
+    return _globalVar();
   },
 
   /**
@@ -188,7 +188,7 @@ var ReactGA = {
       return;
     }
 
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
       _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
@@ -219,7 +219,7 @@ var ReactGA = {
       return;
     }
 
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
       modalName = trim(modalName);
       var path = '/modal/' + modalName;
       _gaCommand(trackerNames, 'send', 'pageview', path);
@@ -241,7 +241,7 @@ var ReactGA = {
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
   timing: function (args, trackerNames) {
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
       if (!args || !args.category || !args.variable
           || !args.hasOwnProperty('value') || typeof args.value !== 'number') {
         warn('args.category, args.variable ' +
@@ -277,7 +277,7 @@ var ReactGA = {
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
   event: function (args, trackerNames) {
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
 
       // Simple Validation
       if (!args || !args.category || !args.action) {
@@ -346,7 +346,7 @@ var ReactGA = {
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
   exception: function (args, trackerNames) {
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
 
       // Required Fields
       var fieldObject = {
@@ -379,7 +379,7 @@ var ReactGA = {
      * @param options {Object} optional e.g {path: '/log', debug: true}
      */
     require: function (name, options) {
-      if (typeof ga === 'function') {
+      if (typeof _globalVar() === 'function') {
 
         // Required Fields
         if (!name) {
@@ -404,7 +404,7 @@ var ReactGA = {
             warn('Empty `options` given to .require()');
           }
 
-          globalVar()('require', name, options);
+          _globalVar()('require', name, options);
 
           if (_debug) {
             log('called ' + _globalName +'(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
@@ -412,7 +412,7 @@ var ReactGA = {
 
           return;
         } else {
-          globalVar()('require', name);
+          _globalVar()('require', name);
 
           if (_debug) {
             log('called ' + _globalName +'(\'require\', \'' + name + '\');');
@@ -447,7 +447,7 @@ var ReactGA = {
         payload = args[3];
       }
 
-      if (typeof ga === 'function') {
+      if (typeof _globalVar() === 'function') {
         if (typeof pluginName !== 'string') {
           warn('Expected `pluginName` arg to be a String.');
         } else if (typeof action !== 'string') {
@@ -456,19 +456,19 @@ var ReactGA = {
           var command = pluginName + ':' + action;
           payload = payload || null;
           if (actionType && payload) {
-            globalVar()(command, actionType, payload);
+            _globalVar()(command, actionType, payload);
             if (_debug) {
               log('called ' + _globalName +'(\'' + command + '\');');
               log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
             }
           } else if (payload) {
-            globalVar()(command, payload);
+            _globalVar()(command, payload);
             if (_debug) {
               log('called ' + _globalName +'(\'' + command + '\');');
               log('with payload: ' + JSON.stringify(payload));
             }
           } else {
-            globalVar()(command);
+            _globalVar()(command);
             if (_debug) {
               log('called ' + _globalName +'(\'' + command + '\');');
             }
@@ -491,7 +491,7 @@ var ReactGA = {
       return;
     }
 
-    if (typeof ga === 'function') {
+    if (typeof _globalVar() === 'function') {
 
       // Simple Validation
       if (!args || !args.label) {
