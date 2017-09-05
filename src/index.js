@@ -116,7 +116,7 @@ var ReactGA = {
     if (arguments.length > 0) {
       globalVar().apply(this, arguments);
       if (_debug) {
-        log('called ga(\'arguments\');');
+        log('called ' + _globalName +'(\'arguments\');');
         log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
       }
     }
@@ -148,7 +148,7 @@ var ReactGA = {
     _gaCommand(trackerNames, 'set', fieldsObject);
 
     if (_debug) {
-      log('called ga(\'set\', fieldsObject);');
+      log('called ' + _globalName +'(\'set\', fieldsObject);');
       log('with fieldsObject: ' + JSON.stringify(fieldsObject));
     }
   },
@@ -164,7 +164,7 @@ var ReactGA = {
   send: function (fieldObject, trackerNames) {
     _gaCommand(trackerNames, 'send', fieldObject);
     if (_debug) {
-      log('called ga(\'send\', fieldObject);');
+      log('called ' + _globalName +'(\'send\', fieldObject);');
       log('with fieldObject: ' + JSON.stringify(fieldObject));
       log('with trackers: ' + JSON.stringify(trackerNames));
     }
@@ -192,7 +192,7 @@ var ReactGA = {
       _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
-        log('called ga(\'send\', \'pageview\', path);');
+        log('called ' + _globalName +'(\'send\', \'pageview\', path);');
         log('with path: ' + path);
       }
     }
@@ -225,7 +225,7 @@ var ReactGA = {
       _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
-        log('called ga(\'send\', \'pageview\', path);');
+        log('called ' + _globalName +'(\'send\', \'pageview\', path);');
         log('with path: ' + path);
       }
     }
@@ -407,7 +407,7 @@ var ReactGA = {
           globalVar()('require', name, options);
 
           if (_debug) {
-            log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
+            log('called ' + _globalName +'(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
           }
 
           return;
@@ -415,7 +415,7 @@ var ReactGA = {
           globalVar()('require', name);
 
           if (_debug) {
-            log('called ga(\'require\', \'' + name + '\');');
+            log('called ' + _globalName +'(\'require\', \'' + name + '\');');
           }
 
           return;
@@ -458,19 +458,19 @@ var ReactGA = {
           if (actionType && payload) {
             globalVar()(command, actionType, payload);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
+              log('called ' + _globalName +'(\'' + command + '\');');
               log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
             }
           } else if (payload) {
             globalVar()(command, payload);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
+              log('called ' + _globalName +'(\'' + command + '\');');
               log('with payload: ' + JSON.stringify(payload));
             }
           } else {
             globalVar()(command);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
+              log('called ' + _globalName +'(\'' + command + '\');');
             }
 
           }
